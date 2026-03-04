@@ -1,0 +1,24 @@
+http:
+  middlewares:
+    api-rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
+
+    secure-headers:
+      headers:
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+
+    dashboard-basic-auth:
+      basicAuth:
+        # TODO: configure users from an external file or environment.
+        users: []
+
+    gzip-compression:
+      compress: {}
+
