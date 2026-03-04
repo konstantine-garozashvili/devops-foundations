@@ -156,3 +156,7 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Local assignment/spec files (not tracked)
+devops-foundations.rules.md
+DevOps Foundations.pdf
