@@ -70,6 +70,25 @@ web_modules/
 .env.*
 !.env.example
 
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+.DS_Store
+
+# Docker artifacts
+*.pid
+*.pid.lock
+docker-data/
+certs/
+
+# Build artifacts for frontend/backend
+dist/
+build/
+coverage/
+
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
