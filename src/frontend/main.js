@@ -43,8 +43,27 @@ async function checkDbStatus() {
   }
 }
 
-function checkCacheStatus() {
-  // TODO: appeler GET /cache sur l'API backend pour récupérer et incrémenter le compteur de visites Redis.
+async function checkCacheStatus() {
+  const el = document.getElementById("status-cache");
+  const counterEl = document.getElementById("visit-counter");
+  if (!el) return;
+  try {
+    const res = await fetch(`${API_BASE}/cache`);
+    if (res.ok) {
+      const data = await res.json();
+      el.textContent = "✅ Cache : OK";
+      el.className = "status status-ok";
+      if (counterEl && data.counter) {
+        counterEl.textContent = data.counter;
+      }
+    } else {
+      throw new Error("HTTP error " + res.status);
+    }
+  } catch (err) {
+    el.textContent = "❌ Cache : DOWN";
+    el.className = "status status-down";
+    console.error("Cache check failed:", err);
+  }
 }
 
 function submitContactForm(event) {
