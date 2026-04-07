@@ -2,7 +2,7 @@
 
 DevOps Foundations project – production-style, containerized infrastructure with Docker, Traefik, and a simple microservices architecture.
 
-> **Status**: Repository structure scaffolding in progress on `feature/setup-repo-structure`.
+> **Status**: Core infrastructure is implemented and validated locally (Traefik, frontend, backend, postgres, redis, mailhog, adminer).
 
 ## Project overview and goals
 
@@ -25,12 +25,10 @@ For detailed rules and constraints, see `devops-foundations.rules.md`.
 
 ## Getting started (development)
 
-> The commands below are placeholders and will be refined as services and scripts are implemented.
-
 1. Clone the repository:
 
 ```bash
-git clone <YOUR_REPO_URL> devops-foundations
+git clone https://github.com/konstantine-garozashvili/devops-foundations.git devops-foundations
 cd devops-foundations
 ```
 
@@ -40,7 +38,7 @@ cd devops-foundations
 cp .env.example .env
 ```
 
-3. Generate local TLS certificates (script to be implemented in `scripts/generate-certs.sh`):
+3. Generate local TLS certificates:
 
 ```bash
 ./scripts/generate-certs.sh
@@ -49,23 +47,26 @@ cp .env.example .env
 4. Start the stack in development mode:
 
 ```bash
-docker compose up
+docker compose --env-file .env up -d --build
 ```
 
 5. Stop the stack:
 
 ```bash
-docker compose down
+docker compose --env-file .env down
 ```
 
 ## Common commands
 
-- **Start dev stack**: `docker compose up`
-- **Stop stack**: `docker compose down`
-- **Rebuild images** (once Dockerfiles are added): `docker compose build`
+- **Initialize project**: `./scripts/init.sh`
+- **Start dev stack**: `docker compose --env-file .env up -d --build`
+- **Stop stack**: `docker compose --env-file .env down`
+- **Rebuild images**: `docker compose --env-file .env build`
 - **View logs**: `docker compose logs -f`
+- **Run production profile config check**: `docker compose --env-file .env -f docker-compose.yml -f docker-compose.prod.yml config`
+- **Demo backend load balancing locally**: `docker compose --env-file .env up -d --scale backend=2`
 
-Additional commands for scripts and per-service tooling will be documented here as they are added.
+For the load-balancing demo, call `https://api.localhost/health` multiple times and compare the `instance` value in responses.
 
 ## Service URLs
 
