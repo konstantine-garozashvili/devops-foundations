@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   frontend:
     volumes:
@@ -9,5 +7,7 @@ services:
     environment:
       - APP_ENV=development
     volumes:
-      - ./src/backend:/app:ro
+      # Mount only the source file for hot-reload — do NOT mount the whole /app
+      # so the container's node_modules (built by npm ci) are preserved.
+      - ./src/backend/server.js:/app/server.js:ro
 
