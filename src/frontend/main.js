@@ -66,14 +66,40 @@ async function checkCacheStatus() {
   }
 }
 
-function submitContactForm(event) {
+async function submitContactForm(event) {
   event.preventDefault();
   const resultEl = document.getElementById("contact-result");
+  const form = event.target;
   if (!resultEl) return;
 
-  // TODO: envoyer les données du formulaire en POST /contact sur l'API backend.
-  resultEl.textContent =
-    "Envoi du formulaire simulé. L'intégration réelle sera ajoutée plus tard.";
+  const data = {
+    name: form.name.value,
+    email: form.email.value,
+    message: form.message.value
+  };
+
+  resultEl.textContent = "Envoi en cours...";
+  resultEl.style.color = "inherit";
+
+  try {
+    const res = await fetch(`${API_BASE}/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    if (res.ok) {
+      resultEl.textContent = "✅ Message envoyé avec succès !";
+      resultEl.style.color = "green";
+      form.reset();
+    } else {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || "Erreur HTTP " + res.status);
+    }
+  } catch (err) {
+    resultEl.textContent = `❌ Erreur : ${err.message}`;
+    resultEl.style.color = "red";
+  }
 }
 
 function setup() {
@@ -84,7 +110,6 @@ function setup() {
     form.addEventListener("submit", submitContactForm);
   }
 
-  // Appels vers les fonctions de statut (placeholder pour l'instant).
   checkBackendStatus();
   checkDbStatus();
   checkCacheStatus();
