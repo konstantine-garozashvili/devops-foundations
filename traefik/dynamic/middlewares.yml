@@ -16,10 +16,10 @@ http:
 
     dashboard-basic-auth:
       basicAuth:
-        # TODO: configure users from an external file or environment.
-        # Default user is "admin", password is "password" for now until Phase 3 complete
+        # Secure credentials for Traefik admin dashboard.
+        # Username: devops, Password: devops_admin
         users:
-          - "admin:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/"
+          - "devops:$apr1$BCI.FguM$rCASXx66G7AjjVlsO1R5S0"
 
     backend-cors:
       headers:
