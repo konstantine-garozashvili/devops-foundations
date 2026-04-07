@@ -17,7 +17,25 @@ http:
     dashboard-basic-auth:
       basicAuth:
         # TODO: configure users from an external file or environment.
-        users: []
+        # Default user is "admin", password is "password" for now until Phase 3 complete
+        users:
+          - "admin:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/"
+
+    backend-cors:
+      headers:
+        accessControlAllowMethods:
+          - "GET"
+          - "POST"
+          - "OPTIONS"
+        accessControlAllowHeaders:
+          - "Origin"
+          - "Content-Type"
+          - "Accept"
+        accessControlAllowOriginList:
+          - "https://app.localhost"
+          - "http://app.localhost"
+        accessControlMaxAge: 100
+        addVaryHeader: true
 
     gzip-compression:
       compress: {}
