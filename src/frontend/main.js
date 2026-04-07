@@ -1,9 +1,9 @@
 // Entry point for the DevOps Foundations dashboard frontend.
-// The real API calls will be implemented in a later feature.
+
+const API_BASE = 'https://api.localhost';
 
 function logLoaded() {
-  // Simple marker in the console so we can confirm the frontend is served correctly.
-  console.info("[dashboard] Page chargée (placeholder).");
+  console.info("[dashboard] Frontend loaded and connecting to API...");
 }
 
 function checkBackendStatus() {
