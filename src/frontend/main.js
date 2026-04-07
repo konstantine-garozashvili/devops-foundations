@@ -6,9 +6,23 @@ function logLoaded() {
   console.info("[dashboard] Frontend loaded and connecting to API...");
 }
 
-function checkBackendStatus() {
-  // TODO: appeler GET /health sur l'API backend (https://api.localhost/health via Traefik).
-  // Pour le moment, on laisse le statut à \"Inconnu\".
+async function checkBackendStatus() {
+  const el = document.getElementById("status-backend");
+  if (!el) return;
+  try {
+    const res = await fetch(`${API_BASE}/health`);
+    if (res.ok) {
+      const data = await res.json();
+      el.textContent = `✅ Backend : OK (${data.version || '0.2.0'})`;
+      el.className = "status status-ok";
+    } else {
+      throw new Error("HTTP error " + res.status);
+    }
+  } catch (err) {
+    el.textContent = "❌ Backend : DOWN";
+    el.className = "status status-down";
+    console.error("Backend health check failed:", err);
+  }
 }
 
 function checkDbStatus() {
