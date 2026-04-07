@@ -2,14 +2,14 @@ version: "3.9"
 
 services:
   traefik:
-    image: traefik:v3.0
+    image: traefik:latest
     command:
       - "--configFile=/etc/traefik/traefik.yml"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
       - "./traefik/dynamic:/etc/traefik/dynamic:ro"
-      - "certs:/certs"
+      - "./traefik/certs:/certs:ro"
     networks:
       - frontend
       - backend
@@ -56,7 +56,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`api.localhost`)"
       - "traefik.http.routers.backend.entrypoints=websecure"
-      - "traefik.http.routers.backend.middlewares=api-rate-limit@file,secure-headers@file,gzip-compression@file"
+      - "traefik.http.routers.backend.middlewares=backend-cors@file,api-rate-limit@file,secure-headers@file,gzip-compression@file"
       - "traefik.http.services.backend.loadbalancer.server.port=3000"
 
   postgres:
@@ -96,5 +96,4 @@ networks:
 volumes:
   postgres_data:
   redis_data:
-  certs:
 
