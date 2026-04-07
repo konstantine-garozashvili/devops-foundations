@@ -1,4 +1,3 @@
-version: "3.9"
 
 services:
   traefik:
@@ -16,24 +15,45 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(`traefik.localhost`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.middlewares=dashboard-basic-auth@file,secure-headers@file"
+      - "traefik.http.routers.traefik.middlewares=dashboard-basic-auth@docker,secure-headers@file"
+      - "traefik.http.middlewares.dashboard-basic-auth.basicauth.users=${TRAEFIK_DASHBOARD_BASICAUTH_USERS:?TRAEFIK_DASHBOARD_BASICAUTH_USERS must be set}"
 
   frontend:
     build:
       context: ./src/frontend
     networks:
       - frontend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080 >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`app.localhost`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.middlewares=secure-headers@file,gzip-compression@file"
-      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+      - "traefik.http.services.frontend.loadbalancer.server.port=8080"
 
   backend:
     build:
@@ -52,6 +72,16 @@ services:
     networks:
       - frontend
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/health >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`api.localhost`)"
@@ -69,6 +99,16 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   redis:
     image: redis:7-alpine
@@ -76,12 +116,32 @@ services:
       - backend
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   mailhog:
     image: mailhog/mailhog:v1.0.1
     networks:
       - frontend
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8025 >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mailhog.rule=Host(`mail.localhost`)"
@@ -94,13 +154,22 @@ services:
     environment:
       - ADMINER_DEFAULT_SERVER=postgres
     networks:
-      - frontend
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080 >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.adminer.rule=Host(`db.localhost`)"
       - "traefik.http.routers.adminer.entrypoints=websecure"
-      - "traefik.http.routers.adminer.middlewares=secure-headers@file,gzip-compression@file"
+      - "traefik.http.routers.adminer.middlewares=dashboard-basic-auth@docker,secure-headers@file,gzip-compression@file"
       - "traefik.http.services.adminer.loadbalancer.server.port=8080"
 
 networks:

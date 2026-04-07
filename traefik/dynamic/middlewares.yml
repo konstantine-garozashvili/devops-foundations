@@ -14,13 +14,6 @@ http:
         contentTypeNosniff: true
         browserXssFilter: true
 
-    dashboard-basic-auth:
-      basicAuth:
-        # Secure credentials for Traefik admin dashboard.
-        # Username: devops, Password: devops_admin
-        users:
-          - "devops:$apr1$BCI.FguM$rCASXx66G7AjjVlsO1R5S0"
-
     backend-cors:
       headers:
         accessControlAllowMethods:
