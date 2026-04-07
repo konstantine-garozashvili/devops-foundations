@@ -25,8 +25,22 @@ async function checkBackendStatus() {
   }
 }
 
-function checkDbStatus() {
-  // TODO: appeler GET /db sur l'API backend pour vérifier la connexion PostgreSQL.
+async function checkDbStatus() {
+  const el = document.getElementById("status-db");
+  if (!el) return;
+  try {
+    const res = await fetch(`${API_BASE}/db`);
+    if (res.ok) {
+      el.textContent = "✅ Database : OK";
+      el.className = "status status-ok";
+    } else {
+      throw new Error("HTTP error " + res.status);
+    }
+  } catch (err) {
+    el.textContent = "❌ Database : DOWN";
+    el.className = "status status-down";
+    console.error("Database check failed:", err);
+  }
 }
 
 function checkCacheStatus() {
