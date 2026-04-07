@@ -84,7 +84,11 @@ function sendJson(res, statusCode, payload) {
 }
 
 async function handleHealth(res) {
-  const result = { status: "ok", service: "backend" };
+  const result = {
+    status: "ok",
+    service: "backend",
+    instance: process.env.HOSTNAME || "unknown",
+  };
 
   try {
     const db = await pgPool.query("SELECT current_database() AS name, NOW() AS now");
@@ -221,6 +225,7 @@ const server = http.createServer((req, res) => {
     return sendJson(res, 200, {
       message: "Welcome to the DevOps Foundations backend.",
       version: "0.2.0",
+      instance: process.env.HOSTNAME || "unknown",
     });
   }
 
