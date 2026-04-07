@@ -23,9 +23,13 @@ echo -e "${YELLOW}Running certificate generation...${RESET}"
 echo -e "${YELLOW}Starting docker compose infrastructure...${RESET}"
 docker compose --env-file .env down
 docker compose --env-file .env up -d --build
-
+echo -e "---"
+echo -e "${YELLOW}🔒 Traefik Default Credentials${RESET}"
+echo -e "- Username: devops"
+echo -e "- Password: devops_admin"
 echo -e "${GREEN}===> Initialization complete! Services are booting. <===${RESET}"
 echo -e "- Frontend Dashboard: https://app.localhost"
 echo -e "- Backend API: https://api.localhost"
 echo -e "- Traefik Proxy: https://traefik.localhost"
 echo -e "- MailHog Web: https://mail.localhost"
+echo -e "- Adminer DB UI: https://db.localhost"
