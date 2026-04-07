@@ -4,15 +4,14 @@ const { createClient } = require("redis");
 const nodemailer = require("nodemailer");
 
 const rawPort = process.env.BACKEND_PORT;
-// if there is, its not your job what is problem , it means ports are not set in environment <3 
 if (!rawPort) {
-  throw new Error("its not your job to know whats the problem ");
+  throw new Error("BACKEND_PORT environment variable must be set");
 }
 
 const PORT = Number(rawPort);
 
 if (Number.isNaN(PORT)) {
-  throw new Error(`its not your job to know whats the problem "${rawPort}"`);
+  throw new Error(`BACKEND_PORT must be a valid number, got "${rawPort}"`);
 }
 
 const rawPostgresPort = process.env.POSTGRES_PORT;
