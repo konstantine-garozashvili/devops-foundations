@@ -1,86 +1,111 @@
 # Contributing to DevOps Foundations
 
-This project follows a **GitFlow**-style workflow and **Conventional Commits**. The focus is on clean infrastructure, clear history, and reproducible environments.
+Thank you for your interest in contributing to this project! This document outlines the workflow and conventions we follow.
 
-## Branching strategy (GitFlow)
+## Branching Strategy (GitFlow)
 
-- **Long-lived branches**
-  - `main`: production-ready, tagged releases only.
-  - `develop`: integration branch for all completed features.
-- **Short-lived branches**
-  - `feature/<short-description>` from `develop`  
-    - Example: `feature/setup-repo-structure`
-  - `release/<version>` from `develop` (optional, for stabilizing releases)
-  - `hotfix/<short-description>` from `main` for urgent production fixes
+### Main Branches
 
-### Rules
+- **main**: Production-ready code. Protected branch - requires pull request approval.
+- **develop**: Integration branch for features. Protected branch - requires pull request approval.
 
-- `main` and `develop` must be **protected**:
-  - No direct pushes.
-  - All changes go through Pull Requests (PRs).
-- Feature branches:
-  - Always branch from `develop`.
-  - Merge back into `develop` only, via PR.
-- Hotfix branches:
-  - Branch from `main`.
-  - Merge into `main`, then merge `main` back into `develop` to keep them in sync.
+### Supporting Branches
 
-## Commit conventions (Conventional Commits)
+- **feature/***: New features (branched from develop, merged back to develop)
+- **bugfix/***: Bug fixes (branched from develop, merged back to develop)
+- **hotfix/***: Urgent production fixes (branched from main, merged to main and develop)
+- **release/***: Release preparation (branched from develop, merged to main and develop)
 
-All commits must follow the **Conventional Commits** format:
+### Workflow
 
-```text
-<type>(optional scope): <short description>
+1. **Start a new feature**:
+   ```bash
+   git checkout develop
+   git pull origin develop
+   git checkout -b feature/your-feature-name
+   ```
+
+2. **Work on your feature** with atomic commits
+
+3. **Push your branch**:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+4. **Create a Pull Request** to develop branch
+
+5. **Code Review**: At least 1 approval required
+
+6. **Merge**: Once approved, merge to develop
+
+## Commit Conventions (Conventional Commits)
+
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification.
+
+### Format
+
+```
+<type>: <description>
+
+[optional body]
+
+[optional footer]
 ```
 
-Common types:
+### Types
 
-- `feat`: a new feature (e.g. `feat(backend): add /health route`)
-- `fix`: a bug fix
-- `docs`: documentation only changes
-- `chore`: tooling, config, or infrastructure changes
-- `refactor`: code changes that neither fix a bug nor add a feature
-- `test`: adding or updating tests
+- **feat**: A new feature
+- **fix**: A bug fix
+- **docs**: Documentation only changes
+- **style**: Code style changes (formatting, semicolons, etc)
+- **refactor**: Code refactoring
+- **test**: Adding or updating tests
+- **chore**: Maintenance tasks (dependencies, config, etc)
+- **build**: Build system changes
+- **ci**: CI/CD changes
 
-Additional rules:
+### Examples
 
-- Aim for **small, focused** commits.
-- Minimum **5 commits per feature branch** (as required by the project rules).
-- Use clear, descriptive messages that explain the **why**, not just the what.
+```
+feat: add Traefik reverse proxy configuration
 
-## Pull request process
+fix: resolve PostgreSQL connection timeout
 
-For every PR:
+docs: update README with installation steps
 
-1. **Target branch**
-   - Feature → `develop`
-   - Release → `main`
-   - Hotfix → `main` (and then sync back into `develop`)
-2. **PR title**
-   - Use a concise description, e.g. `feat: scaffold repo structure`.
-3. **Description**
-   - What was changed (high level).
-   - Why the change was needed.
-   - Any risks, limitations, or follow-ups.
-4. **Checks**
-   - Ensure tests (when present) pass.
-   - Ensure linters/formatters (when configured) pass.
-   - Ensure Docker builds and `docker compose up` work for the modified services (when implemented).
+chore: update Node.js dependencies
+```
 
-## Self-review checklist
+### Commit Best Practices
 
-Before requesting review:
+- Write clear, concise commit messages
+- Use present tense ("add feature" not "added feature")
+- Keep commits atomic (one logical change per commit)
+- Minimum 5 commits per feature branch
+- Reference issues when applicable (#123)
 
-- **Code & structure**
-  - Changes follow the repository structure defined in `devops-foundations.rules.md`.
-  - No secrets, passwords, or tokens in code, configs, or Dockerfiles.
-  - Environment uses variables and `.env` (never committed), with `.env.example` updated if needed.
-- **Git hygiene**
-  - Branch named according to GitFlow (`feature/...`, `hotfix/...`, etc.).
-  - Commits follow Conventional Commits.
-  - No unrelated changes in the same PR.
-- **Docs**
-  - README and other docs updated if behavior, commands, or architecture changed.
+## Code Review Process
 
-By following these guidelines, we keep the history readable, the repo secure, and the project easy to understand for anyone reviewing it.
+1. Create a Pull Request with:
+   - Clear title and description
+   - Reference to related issues
+   - Screenshots if UI changes
 
+2. Request review from team members
+
+3. Address review feedback
+
+4. Obtain at least 1 approval
+
+5. Merge using the appropriate strategy (see below)
+
+## Branch Protection
+
+- **main** and **develop** branches are protected
+- Direct pushes are not allowed
+- Pull requests must be approved before merging
+- All status checks must pass
+
+## Questions?
+
+If you have any questions about the contribution process, please open an issue or contact the maintainers.
