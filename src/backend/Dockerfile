@@ -1,9 +1,9 @@
 FROM node:lts-alpine AS builder
 
 WORKDIR /app
-COPY package.json ./
-RUN npm install --only=production || true
-COPY server.js ./server.js
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+COPY server.js ./
 
 FROM node:lts-alpine AS production
 
