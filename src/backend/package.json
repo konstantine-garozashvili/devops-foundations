@@ -1,0 +1,17 @@
+{
+  "name": "devops-foundations-backend",
+  "version": "0.1.0",
+  "description": "Minimal Node.js HTTP API for the DevOps Foundations project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "nodemailer": "^8.0.4",
+    "pg": "^8.11.0",
+    "redis": "^4.6.0"
+  },
+  "author": "",
+  "license": "MIT"
+}

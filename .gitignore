@@ -70,6 +70,30 @@ web_modules/
 .env.*
 !.env.example
 
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+.DS_Store
+
+# Docker artifacts
+*.pid
+*.pid.lock
+docker-data/
+secrets/
+postgres-data/
+redis-data/
+certs/
+rootCA*.pem
+rootCA*.key
+
+# Build artifacts for frontend/backend
+dist/
+build/
+coverage/
+
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
@@ -137,3 +161,11 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Local assignment/spec files (not tracked)
+devops-foundations.rules.md
+DevOps Foundations.pdf
+DevOps Foundations.md
+claude.md
+pr.md
+gp.md
