@@ -81,7 +81,12 @@ Thumbs.db
 *.pid
 *.pid.lock
 docker-data/
+secrets/
+postgres-data/
+redis-data/
 certs/
+rootCA*.pem
+rootCA*.key
 
 # Build artifacts for frontend/backend
 dist/
@@ -160,3 +165,7 @@ vite.config.ts.timestamp-*
 # Local assignment/spec files (not tracked)
 devops-foundations.rules.md
 DevOps Foundations.pdf
+DevOps Foundations.md
+claude.md
+pr.md
+gp.md
