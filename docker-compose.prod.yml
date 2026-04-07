@@ -1,6 +1,13 @@
-version: "3.9"
-
 services:
+  traefik:
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
+
   backend:
     deploy:
       replicas: 2
@@ -15,19 +22,44 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
 
   postgres:
     deploy:
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
 
   redis:
     deploy:
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
 
   mailhog:
     deploy:
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
+
+  adminer:
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
 

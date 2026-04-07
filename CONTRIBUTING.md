@@ -99,6 +99,24 @@ chore: update Node.js dependencies
 
 5. Merge using the appropriate strategy (see below)
 
+## Self-Review Checklist
+
+Before requesting a review, verify every item below:
+
+- [ ] **Commits** follow Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`)
+- [ ] **Branch** is named correctly (`feature/`, `bugfix/`, `hotfix/`, `release/`)
+- [ ] **No credentials** or secrets in any committed file (`.env` is gitignored)
+- [ ] **Dockerfiles** use multi-stage builds, non-root user, HEALTHCHECK, and OCI labels
+- [ ] **No `|| true`** masking errors in Dockerfile RUN commands
+- [ ] **No application ports** exposed directly — all traffic goes through Traefik
+- [ ] **Health checks** are defined for every service in `docker-compose.yml`
+- [ ] **Named volumes** used for persistent data (no anonymous volumes)
+- [ ] **Network isolation** respected: PostgreSQL and Redis only on `backend` network
+- [ ] **Security headers** present on all routes (HSTS, X-Frame-Options, X-Content-Type-Options, X-XSS-Protection)
+- [ ] **`docker compose up`** runs without errors and all services reach healthy state
+- [ ] **Documentation** updated if behaviour or configuration changed
+- [ ] **No unrelated changes** mixed into the PR
+
 ## Branch Protection
 
 - **main** and **develop** branches are protected
